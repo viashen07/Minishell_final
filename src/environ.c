@@ -1,41 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   environ.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kioulian <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/07/20 18:37:09 by kioulian          #+#    #+#             */
-/*   Updated: 2016/07/23 11:25:11 by kioulian         ###   ########.fr       */
+/*   Created: 2016/07/23 11:19:43 by kioulian          #+#    #+#             */
+/*   Updated: 2016/07/23 11:25:18 by kioulian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	process_line(t_env *e)
+char	*ft_get_env(char *str, t_env *e)
 {
-	
-}
+	int	y;
 
-void	begin_shell(t_env *e)
-{
-	ft_putstr("$> ");
-	get_next_line(0, &e->line);
-	if (ft_strcmp(e->line, "exit") != 0)
+	y = 0;
+	while (environ[y] != 0)
 	{
-		process_line(e);
-		free(e->line);
-		e->line = NULL;
-		begin_shell(e);
+		if (ft_strstr(e->environ[y], str) != NULL)
+			return (&e->environ[y][ft_strlen(str) + 1]);
+		y++;
 	}
-}
-
-int		main(void)
-{
-	t_env		e;
-	extern char	**environ;
-
-	e.environ = environ;
-	begin_shell(t_env *e);
-	return (1);
+	return (NULL);
 }
