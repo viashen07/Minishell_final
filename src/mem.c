@@ -1,30 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strcat.c                                           :+:      :+:    :+:   */
+/*   mem.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kioulian <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/05/09 16:33:25 by kioulian          #+#    #+#             */
-/*   Updated: 2016/07/24 15:40:05 by kioulian         ###   ########.fr       */
+/*   Created: 2016/07/24 13:48:55 by kioulian          #+#    #+#             */
+/*   Updated: 2016/07/24 15:49:52 by kioulian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strcat(char *s1, const char *s2)
-{
-	int	i;
-	int	j;
+#include "../includes/minishell.h"
 
-	i = 0;
-	j = 0;
-	while (s1[i] != '\0')
-		i++;
-	while (s2[j] != '\0')
+void	run_exec(char *path, t_env *e)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == 0)
 	{
-		s1[i] = s2[j];
-		i++;
-		j++;
+		if (execve(path, e->args, e->environ) == -1)
+			ft_putstr("Error\n");
 	}
-	s1[i] = '\0';
-	return (s1);
+	else
+		waitpid(pid, &status, WUNTRACED);
+	free(path);
+	path = NULL;
+}
+
+void	free_tab(char **tab)
+{
+	int	y;
+
+	y = 0;
+	while (tab[y] != 0)
+	{
+		free(tab[y]);
+		tab[y] = NULL;
+		y++;
+	}
 }

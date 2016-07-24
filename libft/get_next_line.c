@@ -6,36 +6,11 @@
 /*   By: kioulian <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 10:30:41 by kioulian          #+#    #+#             */
-/*   Updated: 2016/06/09 15:51:06 by kioulian         ###   ########.fr       */
+/*   Updated: 2016/07/24 17:23:42 by kioulian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-static int	check_stock(char **stock, char **line)
-{
-	char			*tmp;
-	static int		count;
-
-	if (*stock)
-	{
-		if ((tmp = ft_strchr(*stock, '\n')))
-		{
-			*tmp = '\0';
-			*line = ft_strdup(*stock);
-			free(*stock);
-			*stock = ft_strdup(tmp + 1);
-			tmp = NULL;
-			return (1);
-		}
-	}
-	else if (count == 0)
-	{
-		*stock = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1));
-		count = 1;
-	}
-	return (0);
-}
 
 static int	check_read(char **stock, char *str, char **line, int index)
 {
@@ -47,9 +22,10 @@ static int	check_read(char **stock, char *str, char **line, int index)
 		*tmp = '\0';
 		*line = ft_strjoin(*stock, str);
 		free(*stock);
-		*stock = ft_strdup(tmp + 1);
+		*stock = NULL;
 		tmp = NULL;
 		free(str);
+		str = NULL;
 		return (1);
 	}
 	return (0);
@@ -58,28 +34,23 @@ static int	check_read(char **stock, char *str, char **line, int index)
 int			get_next_line(const int fd, char **line)
 {
 	static char	*stock;
+	char		*temp;
 	char		*str;
 	int			index;
 
-	if (check_stock(&stock, line))
-		return (1);
+	stock = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1));
 	str = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1));
 	while ((index = read(fd, str, BUFF_SIZE)) > 0)
 	{
 		if (check_read(&stock, str, line, index))
+		{
+			free(stock);
+			stock = NULL;
 			return (1);
+		}
+		temp = stock;
 		stock = ft_strjoin(stock, str);
-	}
-	free(str);
-	str = NULL;
-	if (index == -1)
-		return (-1);
-	if (ft_strlen(stock) > 0)
-	{
-		*line = ft_strdup(stock);
-		free(stock);
-		stock = NULL;
-		return (1);
+		free(temp);
 	}
 	return (0);
 }

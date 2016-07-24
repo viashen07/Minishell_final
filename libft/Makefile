@@ -6,7 +6,7 @@
 #    By: kioulian <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/12 17:50:45 by kioulian          #+#    #+#              #
-#    Updated: 2016/07/17 16:10:06 by kioulian         ###   ########.fr        #
+#    Updated: 2016/07/24 12:31:05 by kioulian         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -133,13 +133,13 @@ CFLAGS = -Wall -Wextra -Werror -I includes
 all: $(NAME)
 
 $(NAME):
-	gcc -c $(CFLAGS) $(SRC)
-	ar ruv $(NAME) $(SRCO)
-	ranlib $(NAME)
+	@gcc -c -g3 $(CFLAGS) $(SRC)
+	@ar ruv $(NAME) $(SRCO)
+	@ranlib $(NAME)
 clean:
-	rm -f $(SRCO)
+	@rm -f $(SRCO)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
