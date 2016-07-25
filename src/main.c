@@ -6,7 +6,7 @@
 /*   By: kioulian <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/20 18:37:09 by kioulian          #+#    #+#             */
-/*   Updated: 2016/07/24 17:28:43 by kioulian         ###   ########.fr       */
+/*   Updated: 2016/07/25 13:43:36 by vgovende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,18 @@ void	begin_shell(t_env *e)
 	get_next_line(0, &e->line);
 	if (strcmp(e->line, "exit") != 0)
 	{
-		process_line(e);
-		free(e->line);
-		e->line = NULL;
-		if (e->args)
+		if (strcmp(e->line, "") != 0)
 		{
-			free_tab(e->args);
-			free(e->args);
+			process_line(e);
+			free(e->line);
+			e->line = NULL;
+			if (e->args)
+			{
+				free_tab(e->args);
+				free(e->args);
+			}
+			e->args = NULL;
 		}
-		e->args = NULL;
 		begin_shell(e);
 	}
 	free(e->line);
